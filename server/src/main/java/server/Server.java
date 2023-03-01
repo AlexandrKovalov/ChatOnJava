@@ -1,5 +1,9 @@
 package server;
 
+import commands.Commands;
+import server.authentication.AuthService;
+import server.authentication.SimpleAuthService;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,20 +17,20 @@ public class Server {
     private final int PORT = 7777;
 
     private List<ClientHandler> clients = new CopyOnWriteArrayList<>();
+    private AuthService authService;
 
     public Server() {
-
-
+        authService = new SimpleAuthService();
         try {
-            server = new ServerSocket(PORT);
+            server = new ServerSocket(Commands.PORT);
             System.out.println("Сервер успешно запущен");
 
 
             while (true) {
                 socket = server.accept();
                 System.out.println("Клиент успешно соединился по порту " + socket.getPort());
-                ClientHandler handler = new ClientHandler(socket, this);
-                clients.add(handler);
+                new ClientHandler(socket, this, authService );
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,6 +49,13 @@ public class Server {
         for (ClientHandler client: clients) {
             client.sendMessage(message);
         }
+    }
+
+    public void subscribe (ClientHandler handler) {
+        clients.add(handler);
+    }
+    public void unsubscribe(ClientHandler handler) {
+        clients.remove(handler);
     }
 
 }

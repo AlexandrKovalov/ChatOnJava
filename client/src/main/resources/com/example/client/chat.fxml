@@ -8,14 +8,21 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.client.MainController">
+
+    <HBox spacing="20" fx:id="authForm">
+        <TextField fx:id="loginField" HBox.hgrow="ALWAYS" promptText="Введите логин"/>
+        <PasswordField fx:id="passwordField" HBox.hgrow="ALWAYS" promptText="Введите пароль"/>
+        <Button text="Войти" onAction="#tryToAuth"/>
+    </HBox>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
     <TextArea fx:id="textArea" VBox.vgrow="ALWAYS" editable="false"/>
-    <HBox spacing="20">
+    <HBox fx:id="messageForm" spacing="20" visible="false" managed="false">
         <TextField fx:id="textField" HBox.hgrow="ALWAYS" promptText="Введите текст" onAction="#sendMessage"/>
         <Button text="Отправить" onAction="#sendMessage"/>
     </HBox>
